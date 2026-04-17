@@ -1,2 +1,7 @@
 .plans/
 implement-page-workspace/
+
+# hook TS workspace
+hooks/ts/node_modules/
+hooks/ts/bun.lock
+hooks/ts/bun.lockb

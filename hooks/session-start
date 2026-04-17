@@ -98,6 +98,12 @@ if [ -f "$BOOTSTRAP_FILE" ]; then
   BOOTSTRAP_CONTENT=$(cat "$BOOTSTRAP_FILE")
 fi
 
+AUTONOMY_FILE="${PLUGIN_ROOT}/bootstrap/autonomy-check.md"
+AUTONOMY_CONTENT=""
+if [ -f "$AUTONOMY_FILE" ]; then
+  AUTONOMY_CONTENT=$(cat "$AUTONOMY_FILE")
+fi
+
 # Detect project from cwd
 PROJECT_NAME=""
 if git rev-parse --is-inside-work-tree &>/dev/null; then
@@ -142,6 +148,10 @@ fi
 
 # Build full context: skill content + wisdom
 context="${BOOTSTRAP_CONTENT}"
+
+if [ -n "$AUTONOMY_CONTENT" ]; then
+  context="${context}"$'\n\n'"${AUTONOMY_CONTENT}"
+fi
 
 if [ -n "$wisdom_content" ]; then
   context="${context}"$'\n\n'"## Inherited Wisdom (${PROJECT_NAME})"$'\n\n'"${wisdom_content}"

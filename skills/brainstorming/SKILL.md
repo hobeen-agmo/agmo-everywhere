@@ -82,3 +82,38 @@ Once the user approves the design:
 - **YAGNI** — remove any feature that is not explicitly requested
 - **Alternatives first** — always propose 2-3 approaches before deciding
 - **Incremental approval** — present design in sections, get approval per section
+
+## Domain Keyword Update (MANDATORY post-save)
+
+After the note is saved successfully, update the project-level domain keyword whitelist.
+
+**Steps**:
+1. Determine `PROJECT` from the saved note path (e.g., `{vault}/agmo-everywhere/...` → `agmo-everywhere`).
+2. Extract keywords:
+   - **tags**: every tag from the note's frontmatter. For each, generate Korean/English aliases (3~5 each).
+   - **nouns**: pick **exactly 5 meaningful nouns** from the note body. Only domain-specific terms (tech names, concepts, system names). Exclude function words, pronouns, programming keywords.
+   - For each noun, generate 한/영/동의어/유의어 aliases (3~5 each).
+3. Call `scripts/domain-update.sh`:
+
+```bash
+scripts/domain-update.sh --project {PROJECT} --data - <<'JSON'
+{
+  "tags": [
+    {"name": "tag1", "aliases": ["한글", "English", "synonym"]}
+  ],
+  "nouns": [
+    {"name": "concept-name", "aliases": ["개념명", "concept name", "related-term", "유의어"]},
+    {"name": "second-concept", "aliases": [...]},
+    {"name": "third-concept", "aliases": [...]},
+    {"name": "fourth-concept", "aliases": [...]},
+    {"name": "fifth-concept", "aliases": [...]}
+  ]
+}
+JSON
+```
+
+**Rules**:
+- `name`: canonical kebab-case (prefer English)
+- exactly 5 nouns (no more, no less)
+- each noun has 3~5 aliases covering 한/영/동의어/유의어
+- Do NOT skip this step — the whitelist is critical for vault-prehook

@@ -21,6 +21,15 @@
             "timeout": 3
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/vault-prehook\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PreToolUse": [
